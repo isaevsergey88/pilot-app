@@ -1,3 +1,6 @@
+def is_master = env.BRANCH_NAME == 'master'
+def docker_image_tag = is_master ? 'latest' : 'latest-dev'
+
 pipeline {
   environment {
     registry = "isaevgreensight/pilot-app"
@@ -5,8 +8,6 @@ pipeline {
     dockerImage = ''
   }
   agent any
-  def is_master = env.BRANCH_NAME == 'master'
-  def docker_image_tag = is_master ? 'latest' : 'latest-dev'
   stages {
     stage('Cloning Git') {
       steps {
@@ -25,8 +26,8 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-            dockerImage.push('latest')
+            // dockerImage.push()
+            dockerImage.push(docker_image_tag)
           }
         }
       }

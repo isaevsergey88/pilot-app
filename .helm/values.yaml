@@ -6,7 +6,10 @@ replicaCount: 1
 
 image:
   repository: isaevgreensight/pilot-app
-  tag: latest
+  tag:
+    _default: 'latest'
+    prod: 'latest'
+    stage: 'latest-dev'
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -33,7 +36,10 @@ securityContext: {}
 
 service:
   type: NodePort
-  exposePort: 30000
+  exposePort: 
+    _default: 30000
+    prod: 30001
+    stage: 30001
   targetPort: 3000
   internalPort: 3000
 

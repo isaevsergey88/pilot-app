@@ -7,7 +7,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - nodePort: {{ .Values.service.exposePort }}
+    - nodePort: {{ pluck .Values.global.env .Values.service.exposePort | first | default .Values.service.exposePort._default }}
       port: {{ .Values.service.internalPort }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP

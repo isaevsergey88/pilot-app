@@ -38,10 +38,13 @@ service:
   type: NodePort
   exposePort: 
     _default: 30000
-    prod: 30001
+    prod: 30000
     stage: 30001
   targetPort: 3000
-  internalPort: 3000
+  internalPort:
+    _default: 3000
+    prod: 3000
+    stage: 3001
 
 ingress:
   enabled: false

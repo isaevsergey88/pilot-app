@@ -8,7 +8,7 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - nodePort: {{ pluck .Values.global.env .Values.service.exposePort | first | default .Values.service.exposePort._default }}
-      port: {{ .Values.service.internalPort }}
+      port: {{ pluck .Values.global.env .Values.service.internalPort | first | default .Values.service.internalPort._default }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
       name: http

@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: isaevgreensight/pilot-app
-  tag: latest
+  tag: 1
   pullPolicy: Always
 
 imagePullSecrets: []

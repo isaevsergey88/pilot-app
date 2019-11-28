@@ -27,7 +27,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.image.repository }}:{{ pluck .Values.global.env .Values.image.tag | first | default .Values.image.tag._default }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http

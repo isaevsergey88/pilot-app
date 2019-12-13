@@ -1,57 +1,37 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "pilot-app.fullname" . }}
+  name: {{ .Chart.Name }}
   labels:
-{{ include "pilot-app.labels" . | indent 4 }}
+    chart: {{ .Chart.Name }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "pilot-app.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: {{ .Chart.Name }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ include "pilot-app.name" . }}
-        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: {{ .Chart.Name }}
     spec:
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-      serviceAccountName: {{ template "pilot-app.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ pluck .Values.global.env .Values.image.tag | first | default .Values.image.tag._default }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - name: http
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: TCP
-          livenessProbe:
-            httpGet:
-              path: /
-              port: http
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-      {{- with .Values.nodeSelector }}
-      nodeSelector:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-    {{- with .Values.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
-    {{- with .Values.tolerations }}
-      tolerations:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
+      - name: node
+        image: "{{ .Values.image.repository }}:{{ pluck .Values.global.env .Values.image.tag | first | default .Values.image.tag._default }}"
+        pullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 0
+            memory: 256Mi
+          limits:
+            cpu: 0
+            memory: 512Mi
+        ports:
+        - containerPort: {{ pluck .Values.global.env .Values.app.api.rest_port | first | default .Values.app.api.rest_port._default }}
+          name: http
+          protocol: TCP
+

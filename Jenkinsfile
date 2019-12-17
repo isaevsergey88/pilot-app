@@ -18,7 +18,12 @@ pipeline {
     stage('Building image') {
       steps{
         script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          withCredentials([usernamePassword(credentialsId: 'database-credentials', passwordVariable: 'app_db_password', usernameVariable: 'app_db_username'), string(credentialsId: 'app_jwt_secret', variable: 'app_jwt_secret')]) {
+            sh """
+              echo app_db_password: ${app_db_password} app_db_username: ${app_db_username} app_jwt_secret: ${app_jwt_secret}
+            """
+            dockerImage = docker.build registry + ":$BUILD_NUMBER"
+          }
         }
       }
     }

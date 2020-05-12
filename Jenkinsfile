@@ -1,10 +1,10 @@
 #!groovy
 // -*- coding: utf-8; mode: Groovy; -*-
 
-// properties([
-//     buildDiscarder (logRotator (artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')),
-//     disableConcurrentBuilds (),
-// ])
+properties([
+    buildDiscarder (logRotator (artifactDaysToKeepStr: '', artifactNumToKeepStr: '10', daysToKeepStr: '', numToKeepStr: '10')),
+    disableConcurrentBuilds (),
+])
 
 // Registry credentials
 env.DOCKER_REGISTRY = 'dockerhub.greensight.ru'

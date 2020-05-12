@@ -11,14 +11,14 @@ env.DOCKER_REGISTRY = 'dockerhub.greensight.ru'
 env.DOCKER_REGISTRY_CREDS = 'dockerhub-greensight-credentials'
 
 // Docker build args
-// def GIT_REPO = scm.userRemoteConfigs[0].url
-// def is_master = env.BRANCH_NAME == 'master'
-// def image_days_retention = is_master ? "180" : "7"
-// env.BRANCH = env.BRANCH_NAME.toLowerCase().replaceAll('/','-')
-// def version_suffix = is_master ? '' : "-${BRANCH}"
-// def docker_image = (GIT_REPO =~ /.+\/(.+?).git$/)[0][1]
-// def docker_image_name = "${docker_image}${version_suffix}"
-// def docker_image_tag = "${env.BUILD_NUMBER}"
+def GIT_REPO = scm.userRemoteConfigs[0].url
+def is_master = env.BRANCH_NAME == 'master'
+def image_days_retention = is_master ? "180" : "7"
+env.BRANCH = env.BRANCH_NAME.toLowerCase().replaceAll('/','-')
+def version_suffix = is_master ? '' : "-${BRANCH}"
+def docker_image = (GIT_REPO =~ /.+\/(.+?).git$/)[0][1]
+def docker_image_name = "${docker_image}${version_suffix}"
+def docker_image_tag = "${env.BUILD_NUMBER}"
 
 // k8s options
 
